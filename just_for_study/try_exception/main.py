@@ -98,3 +98,19 @@ try :
 except :
     with open(...) as f :
         traceback.print_exc(file = f)
+        
+# ! 自定义异常类 -- raise
+class AgeError(Exception) :
+    def __init__(self, errorInfo) :
+        self.errorInfo = errorInfo
+    def __str__(self) :
+        return "AGE ERROR!"
+
+if __name__ == "__main__" :
+    age = int(input("请输入一个年龄: "))
+    if age < 1 or age > 150 :
+        raise AgeError(age)
+    else :
+        print("正常的年龄: ", age)
+        
+
