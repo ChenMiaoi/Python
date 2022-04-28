@@ -59,7 +59,7 @@ $$ \sigma(z) = \lim{\frac {1}{1 + 0}} = 1 $$
 $$ \sigma(z) = \lim{\frac {1}{1 + \infty}} = 0 $$  
   - But if someone to designed the $x_0 = 1$ :
 $$
-    x \in \vec R^{n_x + 1} \\
+    x \in \vec R^{n_x + 1},
     \hat y = \sigma(\theta^T \times x) \\
     \theta = 
     \begin{bmatrix}
@@ -71,3 +71,37 @@ $$
     \end{bmatrix} \\
     记:b = \theta_0, w = \{\theta_1, \theta_2,...,\theta_{n_x}\}
 $$
+
+---  
+
+# Logistic Regression Lost Function
+> train the logistic regression's parameters : w and b
+
+- Given the m ($ m_{test}$) training examples:
+
+$$ \{(x^1, y^1), (x^2, y^2), ..., (x^m, y^m)\}$$  
+
+- From them to gain the w and b, and to gain the $ \hat y^{(i)} \rightarrow y^{(i)} $
+
+## The Lost(Error) Function
+> **To gain or maybe to say suit for the single training**
+
+$$ def L(\hat y, y) = \frac{1}{2}(\hat y - y)^2 $$  
+> **But the result leads to the error of the real, the image is uneven**  
+
+- To deal with the bug :
+
+$$ def L(\hat y, y) = -(y\log \hat{y} + (1 - y)\log(1 - \hat y)) $$  
+
+- If $ y = 1 $ , $ L(\hat y, y) = -\log \hat y :$ 
+
+$$ \Rightarrow \log \hat{y} \rightarrow +\infty, 0 \le \hat{y} \le 1 \\ \Rightarrow \lim \hat{y} = 1 $$
+
+- If $ y = 0 $, $ L(\hat{y}, y) = -\log(1 - \hat{y}): $  
+
+$$ \Rightarrow \log(1 - \hat{y}) \rightarrow +\infty, 0 \le \hat{y} \le 1 \\ \Rightarrow \lim \hat{y} = 0 $$  
+
+## Cost Function
+> **For the whole training examples**  
+
+$$ def J(w, b) = \frac{1}{m}\sum_{i = 1}^{m}{L(\hat{y}^{(i)}, y^{(i)})} \\ = \frac{1}{m}\sum_{i = 1}^{m}{[-y^{(i)}\log \hat{y}^{(i)} + (1 - y^{(i)})\log(1 - \hat{y}^{(i)})]}$$
