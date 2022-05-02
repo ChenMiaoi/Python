@@ -5,6 +5,8 @@ from cupshelpers import Printer
 import numpy as np
 import math
 
+from regex import B
+
 # TODO 创建一个数组
 a = np.arange(10)
 print(a)
@@ -106,3 +108,90 @@ print(a)
 # ! base就是对数log的底数
 a = np.logspace(1, 10, 10, base = 2)
 print(a)
+
+# TODO 矩阵的索引与切片
+a = np.arange(10)
+print(a)
+
+# TODO 索引
+print("索引0处的位置: ", a[0])
+print("索引5处的位置: ", a[5])
+
+# ! python能够支持负下标访问(逆序)
+print("索引-1处的元素: ", a[-1])
+
+# TODO 切片操作 [start: stop: step] -- [start, stop)
+print(a[3:])
+
+# ! 切片操作也支持负索引
+
+x = np.arange(1, 13)
+print(x)
+a = x.reshape(4, 3)
+print(a)
+print(a[2])
+print(a[2][2])
+
+# TODO 复制矩阵
+a = np.arange(1, 13).reshape(3, 4)
+print(a)
+sub_a = a[ : 2, : 2]
+print(sub_a)
+sub_a[0][0] = 100
+print(sub_a)
+print(a)
+# ! 通过切片得到的矩阵，运用的浅拷贝，如果对该矩阵操作会影响源数组
+# TODO 使用np.copy()方法实现深拷贝
+sub_aa = np.copy(a[ : 2, : 2])
+sub_aa[0, 0] = 200
+print(sub_aa)
+print(a)
+
+# TODO 改变矩阵维度
+# TODO np.reshape(self, shape, order)
+a = np.arange(1, 25)
+print(a)
+b = a.reshape((4, 6))
+print(b)
+
+# !规定，reshape中的-1表示将矩阵转为一维矩阵
+
+# ! 通过如下函数将多维转化为一维
+# TODO np.ravel()
+# TODO np.flatten()
+
+# TODO 矩阵拼接 -- 参数需要用列表或元组传参
+# TODO 水平矩阵拼接， np.hstack([obj1, obj2]) -- 行不变(行数必须相等)，列拼接
+a = np.arange(1, 5).reshape(2, 2)
+print(a)
+b = np.arange(5, 9).reshape(2, 2)
+print(b)
+c = np.hstack([a, b])
+print(c)
+
+# TODO 垂直矩阵拼接， np.vstack([obj1, obj2]) -- 列不变(列数必须相等)，行拼接
+a = np.arange(1, 5).reshape(2, 2)
+print(a)
+b = np.arange(5, 9).reshape(2, 2)
+print(b)
+c = np.vstack((a, b))
+print(c)
+
+# TODO 使用np.concatenate((obj1, obj2...), axis = 0)
+# ! axis代表了拼接方向，默认是0(垂直方向拼接), 为1(水平方向拼接), 为2(纵深方向拼接)
+a = np.arange(1, 5).reshape(2, 2)
+print(a)
+b = np.arange(5, 9).reshape(2, 2)
+print(b)
+c = np.concatenate((a, b), axis = 0)
+print(c)
+
+a = np.arange(1, 13).reshape(1, 2, 6)
+b = np.arange(101, 113).reshape(1, 2, 6)
+
+r1 = np.concatenate((a, b), axis=0)
+r2 = np.concatenate((a, b), axis=1)
+r3 = np.concatenate((a, b), axis=2)
+print(r1, r1.shape)
+print(r2, r2.shape)
+print(r3, r3.shape)
