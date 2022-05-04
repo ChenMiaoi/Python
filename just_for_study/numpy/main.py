@@ -195,3 +195,55 @@ r3 = np.concatenate((a, b), axis=2)
 print(r1, r1.shape)
 print(r2, r2.shape)
 print(r3, r3.shape)
+
+# TODO 矩阵的分隔
+# TODO np.split(ary, indices_or_sections, axis)
+# ! ary -- 被分隔的矩阵
+# ! indices_or_sections -- 如果是一个整数，就用该数平均分隔，如果是一个范围，则沿轴切分
+
+a = np.arange(1, 13)
+r = np.split(a, 3)
+print(a)
+print(r)
+
+r = np.split(a, [4, 6])
+print(r)
+
+a = np.arange(1, 17).reshape(4, 4)
+print(a)
+r = np.split(a, 2, axis = 0)
+print(r)
+r1 = np.split(a, 2, axis = 1)
+print(r1)
+
+r, w, k  = np.split(a, [2, 3], axis = 0)
+print(r)
+print(w)
+print(k)
+
+r, w, k  = np.split(a, [2, 3], axis = 1)
+print(r)
+print(w)
+print(k)
+
+# TODO np.hsplit(ary, indices_or_sections)水平方向分隔
+# TODO np.vsplit(ary, indices_or_sections)垂直方向分隔
+
+# TODO 矩阵的转置
+# TODO np.transpose()
+a = np.arange(1, 13).reshape(4, 3)
+print(a)
+b = a.transpose()
+print(b, b.shape)
+
+# TODO ndarray.T -- 同样实现转置
+print(a.T, a.shape)
+
+# ! 对于三维矩阵，默认的转置是将i和k转置，但是transpose可以指定转置
+# ! 对于矩阵，维度的表示从0开始分别对应
+a = np.arange(1, 25).reshape(2, 3, 4)
+b = np.transpose(a, (1, 2, 0))
+print(a, a.shape)
+print(b, b.shape)
+
+
