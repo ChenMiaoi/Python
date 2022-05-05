@@ -58,3 +58,20 @@ y = np.tan(x)
 plt.plot(x, y)
 plt.savefig("sin_cos_tan.jpg")
 plt.show()
+
+# TODO 使用plt.subplot()将画布分区
+# TODO 使用plt.xlim() 或者 plt.ylim()修改x，y轴的坐标
+x = np.linspace(1, 10, 100)
+plt.subplot(2, 2, 1) # ! 两行两列第一分区
+plt.title('sin(x)')
+plt.plot(x, np.sin(x))
+plt.subplot(2, 2, 2)
+plt.title('cos(x)')
+plt.plot(x, np.cos(x))
+plt.subplot(2, 2, 3)
+plt.title('tan(x)')
+plt.plot(x, np.tan(x))
+plt.subplot(2, 2, 4)
+plt.title('cot(x)')
+plt.plot(x, 1 / np.tan(x))
+plt.show()
