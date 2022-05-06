@@ -104,4 +104,95 @@ $$ \Rightarrow \log(1 - \hat{y}) \rightarrow +\infty, 0 \le \hat{y} \le 1 \\ \Ri
 ## Cost Function
 > **For the whole training examples**  
 
-$$ def J(w, b) = \frac{1}{m}\sum_{i = 1}^{m}{L(\hat{y}^{(i)}, y^{(i)})} \\ = \frac{1}{m}\sum_{i = 1}^{m}{[-y^{(i)}\log \hat{y}^{(i)} + (1 - y^{(i)})\log(1 - \hat{y}^{(i)})]}$$
+$$ def J(w, b) = \frac{1}{m}\sum_{i = 1}^{m}{L(\hat{y}^{(i)}, y^{(i)})} \\ = \frac{1}{m}\sum_{i = 1}^{m}{[-y^{(i)}\log \hat{y}^{(i)} + (1 - y^{(i)})\log(1 - \hat{y}^{(i)})]}$$  
+
+---  
+
+# Gradient Descent
+
+> **We already have known that:**  
+>> $$ \hat{y} = \sigma(w^{T}x + b), \sigma(z) = \frac{1}{1 + e^{-z}}$$  
+>> $$ J(w, b) = \frac{1}{m}\sum_{i = 1}^{m}L(\hat{y}^{(i)}, y^{(i)}) = -\frac{1}{m}\sum_{i = 1}^{m}[y^{(i)}\log\hat{y}^{(i)} + (1 - y^{(i)}\log(1 - \hat{y}^{(i)}))]$$  
+
+> **For logistic regression, almost any initialization method will work**  
+
+- gradient descent
+
+> **Start at the initial point and move towards the steepest downhill, then keep moving towards the steepest downhill**  
+
+- Having this **trend**
+
+$$ Repeat:Learn \ Rate : \alpha\\
+  "\ The \ J(w, b) \ use \ as J(w)"\\
+   w := w - \alpha\frac{dJ(w)}{dw} \Rightarrow w := w - \alpha dw\\
+   until \ the \ w \rightarrow \min{(w)}\\
+$$  
+
+> **Gradient Descent moves towards the global minimum**  
+
+- So We can gain the method of the Gradient Descent
+
+$$
+  w := w - \alpha \frac{\partial{(w, b)}}{\partial{w}}, 
+  b := b - \alpha \frac{\partial{(w, b)}}{\partial{b}}
+$$  
+
+> **In Python Code :**  
+> **The math function $\frac{\partial{(w, b)}}{\partial{w}}$ was credited as $dw$**  
+> **Alternatively, all integrals are denoted as $dx$**
+
+---  
+
+# The Logistic Regression Gradient Descent  
+
+---  
+
+- given the $ m_{test} :$  
+
+$$ 
+\begin{bmatrix}
+w_1 & w_2 \\\
+x_1 & x_2
+\end{bmatrix}, b
+$$  
+
+- then have this function list :
+
+$$
+  z = w_1x_1 + w_2x_2 + b \rightarrow \alpha = \sigma{(z)} \rightarrow L(a, y)
+$$  
+
+- for the L to $ \alpha $ :
+
+$$
+  d\alpha = \frac{dL(a, y)}{da} = -\frac{y}{a} + \frac{1 - y}{1 - a}
+$$
+
+- for the $ \alpha $ to z :
+
+$$
+  \frac{d\alpha}{dz} = \alpha(1 - \alpha)
+$$  
+
+- for the L to z :
+
+$$
+  dz = \frac{\partial{L(a, y)}}{\partial z} = \frac{\partial{L(a, y)}}{\partial \alpha} \cdot \frac{d\alpha}{dz} = a - y
+$$  
+
+- for the L to w :
+
+$$
+  dw_m = \frac{\partial{L(a, y)}}{\partial w_m} = x_m \cdot dz = x_m(a - y)
+$$  
+
+- for the L to b :
+
+$$
+  db = \frac{\partial{L(a, y)}}{\partial b} = dz = a - y
+$$  
+
+> **Then we can use the :**  
+> $ w := w - \alpha dw $  
+> $ b := b - \alpha db $  
+> **to update the params w and b**
