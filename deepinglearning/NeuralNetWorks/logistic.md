@@ -195,4 +195,71 @@ $$
 > **Then we can use the :**  
 > $ w := w - \alpha dw $  
 > $ b := b - \alpha db $  
-> **to update the params w and b**
+> **to update the params w and b**  
+
+---  
+
+# Gradient Descent On m examples  
+
+---  
+
+- **Now that we have a single training set, we just to do m training sets($m_{test}$)** 
+
+~~~python
+J = 0 dw = 0  db = 0
+for i in range(m) :
+  z = w * x + b
+  a = sigmoid(z)
+  J += -[y * log(a) + (1 - y) * log * (1 - a)]
+  dz = a - y
+  for i in range (n_x) :
+    dw += x * dz
+  db += dz
+
+  J /= m
+  dw /= m
+  db /= m
+
+'''
+the params w and b :
+  w := w - a * dw
+  b := b - a * db
+'''
+
+~~~
+
+- **In fact , the code is a single training set to run one by on from 1 to m**  
+
+---  
+
+# Vectorization
+
+---  
+
+> **Vectorization is a technique that eliminates the display “for loop”and is widely used in deep learning**  
+
+- The Vectorization Version :
+
+~~~Python
+import numpy as np
+z = w * x + b
+z = np.dot(w, x) + b
+~~~  
+
+- We can use a code to show the effective method "Vectorization"  
+
+~~~ Python
+import numpy as py
+import time
+
+a = np.random.rand(1000000)
+b = np.random.rand(1000000)
+
+tic = time.time()
+c = np.dot(a, b)
+toc = time.time()
+print("Vectorization Version cost time is" + str(1000 * (toc - tic)) + 'ms')
+~~~  
+
+> **So we can find that the use of vectorization can effectively improve efficiency**  
+
