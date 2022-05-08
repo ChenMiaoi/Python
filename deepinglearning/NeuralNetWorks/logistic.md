@@ -238,7 +238,23 @@ the params w and b :
 
 > **Vectorization is a technique that eliminates the display “for loop”and is widely used in deep learning**  
 
-- The Vectorization Version :
+- The Vectorization Version :  
+
+$$
+    w = 
+    \begin{bmatrix}
+    \vdots \\\
+    \vdots \\\
+    \vdots
+    \end{bmatrix}, 
+    x = 
+    \begin{bmatrix}
+    \vdots \\\
+    \vdots \\\
+    \vdots
+    \end{bmatrix}, 
+    w \in \vec{R^{n_x}}, x \in \vec{R^{n_x}}
+$$
 
 ~~~Python
 import numpy as np
@@ -258,8 +274,220 @@ b = np.random.rand(1000000)
 tic = time.time()
 c = np.dot(a, b)
 toc = time.time()
-print("Vectorization Version cost time is" + str(1000 * (toc - tic)) + 'ms')
+print(c)
+print("Vectorization Version cost time is:" + str(1000 * (toc - tic)) + 'ms')
+
+c = 0
+tic = time.time()
+for i in range (1000000) :
+  c += a[i] * b[i]
+toc = time.time()
+print(c)
+print("For loop cost time is :" + str(1000 * (toc - tic)) + "ms")
 ~~~  
 
 > **So we can find that the use of vectorization can effectively improve efficiency**  
 
+- The more examples:
+
+$$
+  u = A \vec{v}
+$$
+
+$$
+  u_i = \sum_{i, j}^{}A_{ij} \vec{v_j}
+$$  
+
+~~~ Python
+''' The non-vectorization '''
+u = np.zeros((n ,1))
+for i in range (n) :
+  for j in range (n) :
+    u[i] += A[i][j] * v[j]
+
+''' The vectorization '''
+u = np.dot(A, v)
+~~~  
+
+- and more
+
+> if u want to apply the exponential operation:
+
+$$
+  v = 
+  \begin{bmatrix}
+  v_1 \\\
+  \vdots \\\
+  v_n
+  \end{bmatrix}, 
+  to \ get \rightarrow 
+  u = 
+  \begin{bmatrix}
+  e^{v_1} \\\
+  e^{v_2} \\\
+  \vdots \\\
+  e^{v_n}
+  \end{bmatrix}
+$$  
+
+~~~ Python
+''' The non-vectorization '''
+u = np.zeros((n ,1))
+for i in range (n) :
+  u[i] = math.exp(v[i])
+
+''' The vectorization '''
+u = np.exp(v)
+~~~  
+
+- So, let's try to simplify the code
+
+~~~python
+J = 0 dw = np.zeros((n_x, 1)) db = 0
+for i in range(m) :
+  z = w.T * x + b
+  a = sigmoid(z)
+  J += -[y * log(a) + (1 - y) * log * (1 - a)]
+  dz = a - y
+  dw += x * dz # x is a matrix, the vectorization calculate
+  db += dz
+
+  J /= m  dw /= m db /= m
+
+'''
+the params w and b :
+  w := w - a * dw
+  b := b - a * db
+'''
+
+~~~  
+
+# Vectorizing Logistic Regression  
+
+---  
+
+- We have those data:
+
+$$
+  z^{(1)} = w^Tx^{(1)} + b, z^{(2)} = w^Tx^{(2)} + b, z^{(3)} = w^Tx^{(3)} + b
+$$ 
+
+$$
+  def \ X = 
+  \begin{bmatrix}
+  \vdots & \vdots & \cdots & \vdots \\\
+  x^{(1)} & x^{(2)} & \cdots & x^{(m)} \\\
+  \vdots & \vdots & \cdots & \vdots
+  \end{bmatrix}
+$$  
+
+$$
+  Z = 
+  \begin{bmatrix}
+  z^{(1)} & z^{(2)} & \cdots & z^{(m)}
+  \end{bmatrix} = 
+  w^TX + 
+  \begin{bmatrix}
+  w^Tx^{(1)} + b & w^Tx^{(2)} + b & \cdots & w^Tx^{(m)} + b
+  \end{bmatrix}
+$$  
+
+$$
+  \Rightarrow 
+  \begin{bmatrix}
+  w^Tx^{(1)} + b & w^Tx^{(2)} + b & \cdots & w^Tx^{(m)} + b
+  \end{bmatrix}
+$$  
+
+- The code :
+
+~~~ Python
+Z = np.dot(w.T , x) + b
+~~~  
+
+> **Broadcasting**  
+> **The "b" param is automatically extended to a matrix by Python**  
+
+
+$$
+  A = 
+  \begin{bmatrix}
+  a^{(1)} & a^{(2)} & \cdots & a^{(m)}
+  \end{bmatrix} =
+  \sigma(z)
+$$  
+
+- Now that we have :
+
+$$
+  dz^{(i)} = a^{(i)} - y^{(i)}
+$$  
+
+$$
+  dZ = 
+  \begin{bmatrix}
+  dz^{(1)} & dz^{(2)} & \cdots & dz^{(m)}
+  \end{bmatrix}
+$$  
+
+$$
+  A = 
+  \begin{bmatrix}
+  a^{(1)} & a^{(2)} & \cdots & a^{(m)}
+  \end{bmatrix}, 
+  Y = 
+  \begin{bmatrix}
+  y^{(1)} & y^{(2)} & \cdots & y^{(m)}
+  \end{bmatrix}
+$$
+
+$$
+  dZ = A - Y = 
+  \begin{bmatrix}
+  a^{(1)} - y^{(1)} & a^{(2)} - y^{(2)} & \cdots & a^{(m)} - y^{(m)}
+  \end{bmatrix}
+$$  
+
+- this function $db = \frac{1}{m}\sum_{i = 1}^{m}dz^{(i)}$ can be written:
+
+~~~ Python
+db = 1 / m * np.sum(dZ)
+~~~
+
+- and the 'dw' :
+
+$$
+  dw = \frac{1}{m}dz^T = \frac{1}{m}
+  \begin{bmatrix}
+  x^{(1)} & x^{(2)} & \cdots & x^{(m)}
+  \end{bmatrix}
+  \begin{bmatrix}
+  dz^{(1)} \\\
+  dz^{(2)} \\\
+  \vdots \\\
+  dz^{(m)}
+  \end{bmatrix}
+$$
+
+$$
+  = \frac{1}{m}
+  \begin{bmatrix}
+  x^{(1)}dz^{(1)} + x^{(2)}dz^{(2)} + \cdots +  x^{(m)}dz^{(m)}
+  \end{bmatrix}
+$$ 
+
+~~~ Python
+J = 0 dw = np.zeros(n_x, 1) db = 0
+Z = np.dot(w.T, X) + b
+A = sigmoid(z)
+dZ = A - Y
+dw = 1 / m * X * dZ.T
+db = 1 / b * np.sum(dZ)
+
+'''
+w := w - a*dw
+b := b - a*db
+'''
+~~~
+
+> **However, the code above is just one gradient descent, and for multiple gradients, the use of a for loop is inevitable**
