@@ -48,9 +48,9 @@ for w in np.arange(0.0, 4.1, 0.1) :
 
 fig = plt.figure()
 ax3 = plt.axes(projection = '3d')
-X, Y = np.meshgrid(w_list, b_list)
-Z = mse_list * X + Y
+X, Z = np.meshgrid(w_list, b_list)
+Y = mse_list * X + Z
 
-ax3.plot_surface(X, Z, Y,cmap='rainbow')
+ax3.plot_surface(X, Y, Z,cmap='rainbow')
 
 plt.show()
