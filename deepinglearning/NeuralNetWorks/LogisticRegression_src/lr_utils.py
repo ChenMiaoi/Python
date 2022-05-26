@@ -1,7 +1,7 @@
 import numpy as np
 import h5py
 
-FILE_PATH = "/home/zack/github_work/Python/deepinglearning/NeuralNetWorks/LogisticRegression_src/datasets/"
+FILE_PATH = "/home/zack/code_work/github_work/Python/deepinglearning/NeuralNetWorks/LogisticRegression_src/datasets/"
     
 def load_dataset():
     train_dataset = h5py.File(FILE_PATH + "/train_catvnoncat.h5", "r") # 打开训练集
