@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import math
 
 x_data = np.arange(-10.0, 10.0, 0.1)
 y_data = 1 / (1 + np.exp(-x_data))
