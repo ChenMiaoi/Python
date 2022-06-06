@@ -108,3 +108,55 @@ cv2.putText(img, text, org, fontFace, fontScale, color, thickness)
 # fontFace : 字体的类型
 # fontScale : 字体的大小
 ```
+
+### 获取并修改图像中的像素点
+> 我们可以通过行列的坐标来获取该像素点的像素值。对于BGR图像，它返回一个蓝，绿，红值的数组。对于灰度，仅返回相应的强度值。
+
+```python
+import numpy as np
+import cv2 as cv
+
+img = cv.imread()
+
+# 获取某个像素值
+px = img[100, 100]
+# 仅获取蓝色通道的强度值
+blue = img[100, 100, 0]
+#修改某个位置的像素值
+img[100, 100] = [255, 255, 255]
+```
+
+### 获取图像的属性
+| 属性 | API | 
+| --- | --- | 
+| 形状 | img.shape | 
+| 图像大小 | img.size | 
+| 数据类型 | img.dtype |
+
+### 图像通道的拆分与合并
+
+```python
+import cv2
+
+# 图像的拆分，因为cv是以BGR通道显示的
+b, g, r = cv2.split(img)
+# 图像的合并
+img = cv2.merge((b, g, r))
+```
+
+### 颜色空间的改变
+> OpenCv中有150多种颜色空间的转换方法。最广泛使用的为：  
+> BGR \leftrightarrow Gray  
+> BGR \leftrightarrow HSV
+
+```python
+import cv2
+
+cv2.cvtColor(src, code, dst, dstCn)
+# src : 图片的numpy数组输入
+# code : 目的色彩空间
+# cv2.COLOR_BGR2GRAY
+# cv2.COLOR_BGR2HSV
+# dst : 一般不用
+# dstCn : 目的图片的通道，一般默认返回值，灰度图片的数组
+```
