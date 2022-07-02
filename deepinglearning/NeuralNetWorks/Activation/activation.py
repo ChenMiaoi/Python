@@ -29,20 +29,17 @@ def tanh(x) :
     plt.savefig("tanh.png")
     plt.show()
 
-def _max(x) :
-    z = max(0, x.any())
-    return z
-
 def ReLU(x) :
     w = 1
     b = 1
     z = w * x + b
-    act = _max(x)
+    act = np.maximum(x, 0)
     plt.plot(x, act)
     plt.title("The tanh function data", fontsize=16)
     plt.xlabel("x datas")
     plt.ylabel("tanh()")
     plt.grid()
+    plt.axvline(x=0.0, ls='--', c='red')
     plt.axhline(y=0.0, ls='--', c='red')
     plt.savefig("ReLU.png")
     plt.show()
@@ -52,4 +49,4 @@ if __name__ == "__main__" :
     x_data = np.arange(-10.0, 10.0, 0.1)
     # sigmoid(x_data)
     # tanh(x_data)
-    ReLU(x_data)
+    # ReLU(x_data)
