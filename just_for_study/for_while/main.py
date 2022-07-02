@@ -1,12 +1,5 @@
 
 # ! while循环
-import imp
-from operator import ge
-from re import X
-from secrets import randbelow
-from tracemalloc import start
-from unicodedata import name
-from unittest import result
 
 
 num = 0
