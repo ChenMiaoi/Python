@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-import pandas
 import pandas as pd
 from dateutil import parser
 
@@ -39,11 +38,99 @@ def Asti() :
     plt.xlabel("time")
     plt.ylabel("temp")
     plt.axhline(y=25, ls='--', c='red')
+    plt.savefig("Asti.png")
     plt.show()
+
+def sort(x) :
+    '''
+        字典进行排序，查看距离最近的三个以及距离最远的三个
+        可以知道：
+            最近的三个城市：Ravenna、Ferrara、Faenza
+            最远的三个城市：Milano、Asti、Torino
+    '''
+    sort_list = zip(x.values(), x.keys())
+    sort_list = sorted(sort_list, reverse=False)
+    return sort_list
+
+def compareWeather() :
+    '''
+        探究三个最远的城市和三个最近的城市天气
+    '''
+    # 三个最近的城市
+    ravenna = pd.read_csv("WeatherData/ravenna_270615.csv")
+    temp1 = ravenna[:]["temp"]
+    time1 = ravenna[:]["day"]
+    dtime1 = []
+    for i in range(0, 17):
+        dtime1.append(time1[i][10:13])
+    dtemp1 = temp1[0:17]
+    dtime1 = pd.Series(dtime1)
+
+    ferrara = pd.read_csv("WeatherData/ferrara_270615.csv")
+    temp2 = ferrara[:]["temp"]
+    time2 = ferrara[:]["day"]
+    dtime2 = []
+    for j in range(1, 19):
+        dtime2.append(time2[j][10:13])
+    dtemp2 = temp2[1:19]
+    dtime2 = pd.Series(dtime2)
+
+    faenza  = pd.read_csv("WeatherData/faenza_270615.csv")
+    temp3 = faenza[:]["temp"]
+    time3 = faenza[:]["day"]
+    dtime3 = []
+    for k in range(0, 19):
+        dtime3.append(time3[k][10:13])
+    dtemp3 = temp3[0:19]
+    dtime3 = pd.Series(dtime3)
+
+    # 因为数据集问题，如果采用原数据集数据会导致图像错误，因此将ferrara的08删除
+    # 且将另外两个数据集的第一个03改为02
+    # 绘制对应的图像，最近的用红色，最远的用绿色
+    plt.plot(dtime1, dtemp1, color = 'red', label = 'r')
+    plt.plot(dtime2, dtemp2, color = 'r')
+    plt.plot(dtime3, dtemp3, color = 'r')
+
+    # 三个最远的城市
+    milano = pd.read_csv("WeatherData/milano_270615.csv")
+    temp1 = milano[:]["temp"]
+    time1 = milano[:]["day"]
+    dtime1 = []
+    for i in range(0, 17):
+        dtime1.append(time1[i][10:13])
+    dtemp1 = temp1[0:17]
+    dtime1 = pd.Series(dtime1)
+
+    asti = pd.read_csv("WeatherData/asti_270615.csv")
+    temp2 = asti[:]["temp"]
+    time2 = asti[:]["day"]
+    dtime2 = []
+    for i in range(0, 19):
+        dtime2.append(time2[i][10:13])
+    dtemp2 = temp2[0:19]
+    dtime2 = pd.Series(dtime2)
+
+    torino = pd.read_csv("WeatherData/torino_270615.csv")
+    temp3 = torino[:]["temp"]
+    time3 = torino[:]["day"]
+    dtime3 = []
+    for i in range(0, 17):
+        dtime3.append(time3[i][10:13])
+    dtemp3 = temp3[0:17]
+    dtime3 = pd.Series(dtime1)
+
+    # 绘制对应的图像，最近的用红色，最远的用绿色
+    plt.plot(dtime1, dtemp1, color='green', label = 'g')
+    plt.plot(dtime2, dtemp2, color='g')
+    plt.plot(dtime3, dtemp3, color='g')
+    plt.title("Six City Trend of Temp", fontsize = 16)
+    plt.xlabel("time")
+    plt.ylabel("temp")
+    plt.legend(loc = 'upper right')
+    plt.savefig("SixCityTrendofTemp.png")
+    plt.show()
+
 
 if __name__ == "__main__" :
     dis = Distance()
-    temp = []
-    time = []
-    Asti()
-
+    compareWeather()
