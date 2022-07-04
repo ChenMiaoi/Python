@@ -115,7 +115,7 @@ def compareWeather() :
     time3 = torino[:]["day"]
     dtime3 = []
     for i in range(0, 17):
-        dtime3.append(time3[i][10:13])
+        dtime3.append(int(time3[i][10:13]))
     dtemp3 = temp3[0:17]
     dtime3 = pd.Series(dtime1)
 
@@ -264,7 +264,7 @@ def cityHumidity(path) :
     time = humidity[:]["day"]
     dtime = []
     for i in range(0, len(humidity)) :
-        dtime.append(time[i][10:13])
+        dtime.append(int(time[i][10:13]))
     return cityhumidity, dtime
 
 def dataSovle(humidity, time) :
@@ -316,9 +316,75 @@ def HumidityAnalysis(x) :
     plt.title("Humidity Analysis", fontsize = 16)
     plt.xlabel("time")
     plt.ylabel("humidity")
+    plt.savefig("Humidity.png")
     plt.show()
 
+def CityHumidity(path, flag) :
+    temp = pd.read_csv(path)
+    temp = temp.sort_values(by="humidity", ascending=flag)
+    temp = temp[:]["humidity"]
+    temp = temp.iloc[0:1] # 取出特定行
+    return temp
 
+def MaxHumidity(x) :
+    x = dict(sort(x))
+    dis = pd.Series(x.keys())
+    rank = pd.Series(x.values())
+    print(rank)
+
+    # 根据远近关系，找出各城市对应的最大湿度
+    ravenna = CityHumidity("WeatherData/ravenna_270615.csv", False)
+    ferrara = CityHumidity("WeatherData/ferrara_270615.csv", False)
+    faenza  = CityHumidity("WeatherData/ferrara_270615.csv", False)
+    cesena  = CityHumidity("WeatherData/cesena_270615.csv", False)
+    bologna = CityHumidity("WeatherData/bologna_270615.csv", False)
+    manatova = CityHumidity("WeatherData/mantova_270615.csv", False)
+    piacenza = CityHumidity("WeatherData/piacenza_270615.csv", False)
+    milano   = CityHumidity("WeatherData/milano_270615.csv", False)
+    asti     = CityHumidity("WeatherData/asti_270615.csv", False)
+    torino   = CityHumidity("WeatherData/torino_270615.csv", False)
+
+    maxhumi = [ravenna, ferrara, faenza, cesena, bologna, manatova, piacenza, milano, asti, torino]
+
+    # 处理数据图像
+    dis = list(dis)
+    plt.plot(dis, maxhumi, 'bo')
+    plt.title("Highest Humidity With Distance", fontsize = 16)
+    plt.xlabel("distance")
+    plt.ylabel("humidity")
+    plt.grid()
+    plt.savefig("HighestHumidityWithDistance.png")
+    plt.show()
+
+def MinHumidity(x) :
+    x = dict(sort(x))
+    dis = pd.Series(x.keys())
+    rank = pd.Series(x.values())
+    print(rank)
+
+    # 根据远近关系，找出各城市对应的最小湿度
+    ravenna = CityHumidity("WeatherData/ravenna_270615.csv", True)
+    ferrara = CityHumidity("WeatherData/ferrara_270615.csv", True)
+    faenza = CityHumidity("WeatherData/ferrara_270615.csv", True)
+    cesena = CityHumidity("WeatherData/cesena_270615.csv", True)
+    bologna = CityHumidity("WeatherData/bologna_270615.csv", True)
+    manatova = CityHumidity("WeatherData/mantova_270615.csv", True)
+    piacenza = CityHumidity("WeatherData/piacenza_270615.csv", True)
+    milano = CityHumidity("WeatherData/milano_270615.csv", True)
+    asti = CityHumidity("WeatherData/asti_270615.csv", True)
+    torino = CityHumidity("WeatherData/torino_270615.csv", True)
+
+    minhumi = [ravenna, ferrara, faenza, cesena, bologna, manatova, piacenza, milano, asti, torino]
+
+    # 处理数据图像
+    dis = list(dis)
+    plt.plot(dis, minhumi, 'bo')
+    plt.title("Lowest Humidity With Distance", fontsize=16)
+    plt.xlabel("distance")
+    plt.ylabel("humidity")
+    plt.grid()
+    plt.savefig("LowestHumidityWithDistance.png")
+    plt.show()
 
 if __name__ == "__main__" :
     dis = Distance()
