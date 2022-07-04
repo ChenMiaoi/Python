@@ -166,6 +166,157 @@ def highTemp(x) :
     plt.grid()
     plt.savefig("HighestTemOfCity.png")
     plt.show()
+    return temp, dis
+
+def Correlation(temp, dis) :
+    x = np.array(dis)
+    y = np.array(temp)
+    # 设 y = ax + b ，已知x,y通过拟合来求解a,b系数
+    '''
+        cost = min(sum_i^n (y_hat - y_i)^2)
+        y_hat = ax + b
+        cost = min(sum_i^n (y_i  - b - ax)^2)
+        现要确定cost最小，梯度下降，则需要使得da, db为0
+        da = -1 * 2 * sum_i^n (y_i  - b - ax)^2 = 0
+        db = -x_i * 2 * sum_i^n (y_i  - b - ax)^2 = 0
+        
+        则经过整理得：
+            a = [sum(x_i^2) * sum(y_i) - sum(x_i) * sum(x_i * y_i)] / [n * sum(x_i^2) - (sum(x_i))^2]
+            b = [n * sum(x_i * y_i) - sum(x_i)*sum(y_i)] / [n * sum(x_I^2) - (sum(x_i)^2)]
+    '''
+
+    x_avr = x.sum() / len(x)
+    y_avr = y.sum() / len(y)
+
+    a = ((x - x_avr) * (y - y_avr)) / ((x - x_avr)**2)
+    b = y_avr - a * x_avr
+
+    return a, b
+
+    '''
+        有公式：
+            a_0 * N + a_1 * sum_{i = 1} ^ {N} x_i = sum_{i = 1}^N y_i
+            a_0 * sum_{i = 1}^N x_i + a_1 * sum_{i=1}^N x_{i}^2 = sum_{i=1}^N x_i * y_i
+            (计算错误弃用)
+    N = len(x)
+    sumx = sum(x)
+    sumy = sum(y)
+    sumx1 = sum(x**2)
+    sumxy = sum(x*y)
+
+    N = len(x)
+    sumx = x.sum()
+    sumy = y.sum()
+    X = x**2
+    sumx1 = X.sum()
+    sumxy = (x * y).sum()
+    A = np.mat([[N, sumx], [sumx, sumx1]])
+    b = np.array([sumy, sumxy])
+
+    return np.linalg.solve(A, b)
+    '''
+
+def CorrelationTrendGraph(x) :
+    '''
+        我们已经在highTemp中分析出了距离对于温度最大值的散点图关系
+        我们在highTemp函数中将得到的距离和温度进行返回
+        根据要求，我们将dis<60的作为近海，dis>60的作为远海，分为两组
+        但根据实际，应该从71km作为分界线，分为两组
+    '''
+    temp, dis = highTemp(x)
+    # 近海组
+    temp1 = temp[0:5]
+    dis1 = dis[0:5]
+
+    # 远海组
+    temp2 = temp[5:10]
+    dis2 = dis[5:10]
+
+    # 由于进行线性回归的过程是一致的，因此封装一个函数进行线性分析
+    a1, b1 = Correlation(temp1, dis1)
+    a2, b2 = Correlation(temp2, dis2)
+
+    # 进行数据分析
+    dis1 = np.array(dis1)
+    y1 = a1 * dis1 + b1
+    print(a1)
+    print(dis1)
+    print(y1)
+
+    dis2 = np.array(dis2)
+    y2 = a2 * dis2 + b2
+
+    # 进行图像处理
+    plt.plot(dis, temp, 'ro')
+    plt.plot(dis1, y1)
+    plt.plot(dis2, y2)
+    plt.plot()
+    plt.title("Correlation", fontsize=16)
+    plt.xlabel("distance")
+    plt.ylabel("temp")
+    plt.grid()
+    # plt.savefig("Correlation.png")
+    plt.show()
+
+def cityHumidity(path) :
+    humidity = pd.read_csv(path)
+    cityhumidity = humidity[:]["humidity"]
+    time = humidity[:]["day"]
+    dtime = []
+    for i in range(0, len(humidity)) :
+        dtime.append(time[i][10:13])
+    return cityhumidity, dtime
+
+def dataSovle(humidity, time) :
+    humidity = list(humidity)
+    key = sorted(zip(time, humidity))
+    humidity = list(zip(*key))
+    return humidity
+
+def HumidityAnalysis(x) :
+    '''
+        分析十个城市中的湿度情况，选取六个城市，分别为三个近海，三个远海
+        近海的采用红色，远海的采用绿色
+    '''
+    x = dict(sort(x))
+    dis = pd.Series(x.keys())
+    rank = pd.Series(x.values())
+    print(rank)
+    # 根据分析，近海的三个城市为：Rvaenna、Ferrara、Faenza
+    # 远海的三个城市为：Milano、Asti、Torino
+
+    # 获取湿度数据,作为封装使用
+    # 近海湿度数据
+    rvaenna, time1 = cityHumidity("WeatherData/ravenna_270615.csv")
+    ferrara, time2 = cityHumidity("WeatherData/ferrara_270615.csv")
+    faenza, time3 = cityHumidity("WeatherData/faenza_270615.csv")
+
+    # 远海湿度数据
+    milano, time4 = cityHumidity("WeatherData/milano_270615.csv")
+    asti, time5 = cityHumidity("WeatherData/asti_270615.csv")
+    torino, time6 = cityHumidity("WeatherData/torino_270615.csv")
+
+    # 分析处理数据做出图表
+    rvaenna = dataSovle(rvaenna, time1)
+    ferrara = dataSovle(ferrara, time2)
+    faenza = dataSovle(faenza, time3)
+    milano = dataSovle(milano, time4)
+    asti = dataSovle(asti, time5)
+    torino = dataSovle(torino, time6)
+    print(rvaenna[0])
+    print(ferrara[0])
+    print(faenza[0])
+
+    plt.plot(rvaenna[0], rvaenna[1], c='r')
+    plt.plot(ferrara[0], ferrara[1], c='r')
+    plt.plot(faenza[0], faenza[1], c='r')
+    plt.plot(milano[0], milano[1], c='g')
+    plt.plot(asti[0], asti[1], c='g')
+    plt.plot(torino[0], torino[1], c='g')
+    plt.title("Humidity Analysis", fontsize = 16)
+    plt.xlabel("time")
+    plt.ylabel("humidity")
+    plt.show()
 
 
 
