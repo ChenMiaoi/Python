@@ -130,7 +130,44 @@ def compareWeather() :
     plt.savefig("SixCityTrendofTemp.png")
     plt.show()
 
+def CityHighTemp(path) :
+    temp = pd.read_csv(path)
+    temp = temp.sort_values(by="temp", ascending=False)
+    temp = temp[:]["temp"]
+    temp = temp.iloc[0:1] # 取出特定行
+    return temp
+
+def highTemp(x) :
+    x = dict(sort(x))
+    dis = pd.Series(x.keys())
+    rank = pd.Series(x.values())
+    print(rank)
+
+    # 此时应该按照rank的远近顺序来提取出各自的温度最大值
+    # 由于相似代码太多，直接封装函数，传入csv文件路径即可
+    temp1 = CityHighTemp("WeatherData/ravenna_270615.csv")
+    temp2 = CityHighTemp("WeatherData/ferrara_270615.csv")
+    temp3 = CityHighTemp("WeatherData/faenza_270615.csv")
+    temp4 = CityHighTemp("WeatherData/cesena_270615.csv")
+    temp5 = CityHighTemp("WeatherData/bologna_270615.csv")
+    temp6 = CityHighTemp("WeatherData/mantova_270615.csv")
+    temp7 = CityHighTemp("WeatherData/piacenza_270615.csv")
+    temp8 = CityHighTemp("WeatherData/milano_270615.csv")
+    temp9 = CityHighTemp("WeatherData/asti_270615.csv")
+    temp10 = CityHighTemp("WeatherData/torino_270615.csv")
+    temp = [temp1, temp2, temp3, temp4, temp5, temp6, temp7, temp8, temp9, temp10]
+    dis = list(dis)
+    print(temp)
+    print(dis)
+    plt.plot(dis, temp, 'ro')
+    plt.title("Highest Temp of City", fontsize = 16)
+    plt.xlabel("distance")
+    plt.ylabel("temp")
+    plt.grid()
+    plt.savefig("HighestTemOfCity.png")
+    plt.show()
+
+
 
 if __name__ == "__main__" :
     dis = Distance()
-    compareWeather()
