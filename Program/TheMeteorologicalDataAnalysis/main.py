@@ -386,5 +386,57 @@ def MinHumidity(x) :
     plt.savefig("LowestHumidityWithDistance.png")
     plt.show()
 
+def windDirection(x) :
+    '''
+        上面已经分析了温度以及湿度，现在开始分析风速、风向
+        取出数据集中的wind_deg、wind_speed
+    '''
+    ravenna = pd.read_csv("WeatherData/ravenna_270615.csv")
+    ravenna = ravenna[:][["wind_deg", "wind_speed", "day"]]
+
+    # 数据处理
+    plt.plot(ravenna["wind_deg"], ravenna["wind_speed"], 'ro')
+    plt.title("Wind Deg And Speed", fontsize = 16)
+    plt.xlabel("wind deg")
+    plt.ylabel("wind speed")
+    plt.savefig("WindDegAndSpeed.png")
+    plt.show()
+
+def showRoseWind(var, city, max_var) :
+
+    N = 8 # 一共八个区间
+    theta = np.arange(2 * np.pi / 16, 2 * np.pi / 8)
+    #theta = np.arange(0. + np.pi / 8, 2 * np.pi / 8, 2 * np.pi / 8)
+    radii = np.array(var)
+
+    plt.axes(polar=True)
+    colors = [(1 - x / max_var, 1 - x / max_var, 0.75) for x in radii]
+    plt.bar(theta, radii, width=(2 * np.pi / N), bottom=0.0, color = colors)
+    plt.title(city, x = 0.2, fontsize = 20)
+    plt.savefig(city + ".png")
+    plt.show()
+
+def PolarMap() :
+    ravenna = pd.read_csv("WeatherData/ravenna_270615.csv")
+    hist, bins = np.histogram(ravenna["wind_deg"], 8, [0, 360])
+    showRoseWind(hist, "Ravenna", max(hist))
+
+    ferrara = pd.read_csv("WeatherData/ferrara_270615.csv")
+    hist, bins = np.histogram(ferrara["wind_deg"], 8, [0, 360])
+    showRoseWind(hist, "Ferrara", max(hist))
+
+def RoseWindSpeed(city) :
+    deg = np.arange(45, 361, 45)
+    speed_avr = []
+    for i in deg:
+        speed_avr.append(city[(city["wind_deg"] > (i - 46)) & (city["wind_deg"] < i)]["wind_speed"].mean())
+    return np.array(speed_avr)
+
+def meanWindSpeed() :
+    ravenna = pd.read_csv("WeatherData/ravenna_270615.csv")
+    hist, bins = np.histogram(ravenna["wind_speed"], 8, [0, 360])
+    showRoseWind(RoseWindSpeed(ravenna), "RavennaSpeed", max(hist))
+
 if __name__ == "__main__" :
     dis = Distance()
+    meanWindSpeed()
