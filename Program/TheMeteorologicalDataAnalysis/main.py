@@ -430,12 +430,12 @@ def RoseWindSpeed(city) :
     speed_avr = []
     for i in deg:
         speed_avr.append(city[(city["wind_deg"] > (i - 46)) & (city["wind_deg"] < i)]["wind_speed"].mean())
-    return np.array(speed_avr)
+    return speed_avr
 
 def meanWindSpeed() :
-    ravenna = pd.read_csv("WeatherData/ravenna_270615.csv")
-    hist, bins = np.histogram(ravenna["wind_speed"], 8, [0, 360])
-    showRoseWind(RoseWindSpeed(ravenna), "RavennaSpeed", max(hist))
+    ravenna = pd.read_csv("WeatherData/mantova_270615.csv", usecols=["wind_deg", "wind_speed"])
+    hist, bins = np.histogram(ravenna, 8, [0, 360])
+    showRoseWind(RoseWindSpeed(ravenna), "MantovaSpeed", max(hist))
 
 if __name__ == "__main__" :
     dis = Distance()
