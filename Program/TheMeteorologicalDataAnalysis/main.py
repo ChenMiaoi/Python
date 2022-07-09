@@ -84,8 +84,6 @@ def compareWeather() :
     dtemp3 = temp3[0:19]
     dtime3 = pd.Series(dtime3)
 
-    # 因为数据集问题，如果采用原数据集数据会导致图像错误，因此将ferrara的08删除
-    # 且将另外两个数据集的第一个03改为02
     # 绘制对应的图像，最近的用红色，最远的用绿色
     plt.plot(dtime1, dtemp1, color = 'red', label = 'r')
     plt.plot(dtime2, dtemp2, color = 'r')
