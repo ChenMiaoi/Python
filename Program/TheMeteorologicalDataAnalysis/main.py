@@ -188,8 +188,17 @@ def Correlation(temp, dis) :
     x_avr = x.sum() / len(x)
     y_avr = y.sum() / len(y)
 
-    a = ((x - x_avr) * (y - y_avr)) / ((x - x_avr)**2)
+    for i in x :
+        for j in y :
+            t = h = 0
+            t += (i - x_avr) * (j - y_avr)
+            h += (i - x_avr) ** 2
+
+    a = t / h
     b = y_avr - a * x_avr
+
+    #a = ((x - x_avr) * (y - y_avr)) / ((x - x_avr)**2)
+    #b = y_avr - a * x_avr
 
     return a, b
 
@@ -255,7 +264,7 @@ def CorrelationTrendGraph(x) :
     plt.xlabel("distance")
     plt.ylabel("temp")
     plt.grid()
-    # plt.savefig("Correlation.png")
+    plt.savefig("Correlation.png")
     plt.show()
 
 def cityHumidity(path) :
@@ -439,4 +448,4 @@ def meanWindSpeed() :
 
 if __name__ == "__main__" :
     dis = Distance()
-    meanWindSpeed()
+    CorrelationTrendGraph(dis)
