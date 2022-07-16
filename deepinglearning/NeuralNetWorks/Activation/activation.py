@@ -31,17 +31,32 @@ def tanh(x) :
 
 def ReLU(x) :
     w = 1
-    b = 1
+    b = 0
     z = w * x + b
-    act = np.maximum(x, 0)
+    act = np.maximum(z, 0)
     plt.plot(x, act)
-    plt.title("The tanh function data", fontsize=16)
+    plt.title("The ReLU function data", fontsize=16)
     plt.xlabel("x datas")
-    plt.ylabel("tanh()")
+    plt.ylabel("ReLU()")
     plt.grid()
     plt.axvline(x=0.0, ls='--', c='red')
     plt.axhline(y=0.0, ls='--', c='red')
     plt.savefig("ReLU.png")
+    plt.show()
+
+def lackReLU(x):
+    w = 1
+    b = 0
+    z = w * x + b
+    act = np.maximum(z, 0.01 * z)
+    plt.plot(x, act)
+    plt.title("The lackReLU function data", fontsize=16)
+    plt.xlabel("x datas")
+    plt.ylabel("lackReLU()")
+    plt.grid()
+    plt.axvline(x=0.0, ls='--', c='red')
+    plt.axhline(y=0.0, ls='--', c='red')
+    plt.savefig("lackReLU.png")
     plt.show()
 
 if __name__ == "__main__" :
@@ -50,3 +65,4 @@ if __name__ == "__main__" :
     # sigmoid(x_data)
     # tanh(x_data)
     # ReLU(x_data)
+    # lackReLU(x_data)
